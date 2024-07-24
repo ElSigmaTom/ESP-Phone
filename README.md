@@ -47,6 +47,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 <details>
   <summary>Device MAC Addresses</summary>
 1: 0xA0, 0x20, 0xA6, 0x1A, 0xA3, 0x13 (AP1 TARGET MAC)
+
 2: 0x8C, 0xCE, 0x4E, 0xCB, 0x0A, 0xF0 (AP2 TARGET MAC)
 </details>
 
