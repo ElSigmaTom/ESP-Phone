@@ -76,7 +76,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 ### Usage
 1. Power on your ESP8266 devices.
 2. Connect to the WiFi network created by the devices.
-3. Access the web interface by going to `http://192.168.4.1`.
+3. Access the web interface by going to `http://192.168.4.1`
 4. Use the web interface to save or send messages.
 ### Troubleshooting
 1. Ensure both devices are powered on and within range.
