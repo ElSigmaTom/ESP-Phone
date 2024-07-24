@@ -29,6 +29,6 @@ void loop(){
 ```
 2. Open serial monitor, click Tools > Serial Monitor or `crtl + shift + m`
 3. Copy the mac address and take note.
-_Note: I taped and wrote "I" and "II" on the backs of my devices to keep track._
+> _I taped and wrote "I" and "II" on the backs of my devices to keep track._
 4. Copy the mac address of the peer into `Line 68` of the code.
    
