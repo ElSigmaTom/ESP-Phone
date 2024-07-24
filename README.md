@@ -70,10 +70,12 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 3. Copy the MAC address and take note. 
   > _Tip: Label your devices to keep track of them._
 4. Copy the MAC address of the peer device into `Line 68` of the main code file in this repository.
+5. Change SSID and Password on lines `10 and 11`.
+ > _Use a unique SSID for each device.
 ### Usage
 1. Power on your ESP8266 devices.
-2. Connect to the WiFi network created by the devices (SSID: ESP8266-AP1, Password: password).
-3. Access the web interface by navigating to the IP address displayed in the serial monitor.
+2. Connect to the WiFi network created by the devices.
+3. Access the web interface by going to `http://192.168.4.1`.
 4. Use the web interface to save or send messages.
 ### Troubleshooting
 1. Ensure both devices are powered on and within range.
