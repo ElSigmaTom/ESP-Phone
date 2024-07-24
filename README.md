@@ -27,7 +27,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 | LCD SDA          | D1           |
 | LCD SCL          | D2           |
 | Display Button   | D3           |
-| Up Button        | D5           |
+| Up Button        | D5           |![pinout](https://github.com/user-attachments/assets/c636221f-1d09-4373-9c25-2ece67fb94c1)
 | Down Button      | D6           |
 | Enter Button     | D7           |
 | Blue LED         | D8           |
