@@ -2,8 +2,10 @@
 ## A simple way to turn two ESP8266's into interactive communication devices. Has built-in webserver to premake phrases. Built for LCD1602 w/ I2C backpack. 
 
 ### To get started:
-Two devices minimum.
-<sub> For Rafty:
+- Two devices minimum.
+
+<sub> 
+For Rafty:
 (If the message is not received, consider swapping between these MAC addresses)
 1: A0:20:A6:1A:A3:13 (AP1 TARGET MAC)
 0xA0, 0x20, 0xA6, 0x1A, 0xA3, 0x13
