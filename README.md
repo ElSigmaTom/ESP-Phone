@@ -87,7 +87,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 3. Verify that the MAC addresses are correctly configured.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE]([LICENSE](https://www.gnu.org/licenses/gpl-3.0.en.html)) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://www.gnu.org/licenses/gpl-3.0.en.html) file for details.
 
 ## Acknowledgments
 - Rui Santos & Sara Santos - [Random Nerd Tutorials](https://RandomNerdTutorials.com)
