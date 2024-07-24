@@ -11,9 +11,10 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 - Efficient, low-power communication using ESP-NOW
 
 ## Planned Features
-- [ ] **Retransmission**: If a message is sent and the peer is not within reach, the device will keep retransmitting the message until it is acknowledged. (Persists reboots)
-- [ ] **LoRa**: LoRa for bonus range.
-- [ ] **Keypad_I2C**: Support for 4x3 Matrix Keypads via an I2C expander like PCF8574. 
+- [ ] **Retransmission**: If a message is sent and the peer is not within reach, the device will keep retransmitting the message until it is acknowledged (persists reboots).
+- [ ] **LoRa**: LoRa for extended range.
+- [ ] **Keypad_I2C**: Support for 4x3 Matrix Keypads via an I2C expander like PCF8574.
+
 ## Hardware Requirements
 - Two ESP8266 devices
 - LCD1602 with I2C backpack
@@ -26,7 +27,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 | LCD SDA          | D1           |
 | LCD SCL          | D2           |
 | Display Button   | D3           |
-| Up Button        | D5           |
+| Up Button        | D5           |![pinout](https://github.com/user-attachments/assets/c636221f-1d09-4373-9c25-2ece67fb94c1)
 | Down Button      | D6           |
 | Enter Button     | D7           |
 | Blue LED         | D8           |
@@ -68,20 +69,33 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
   }
   ```
 2. Open the serial monitor: Tools > Serial Monitor or `Ctrl + Shift + M`
-3. Copy the MAC address and take note. 
+3. Copy the MAC address and take note.
   > _Tip: Label your devices to keep track of them._
 4. Copy the MAC address of the peer device into `Line 68` of the main code file in this repository.
 5. Change SSID and Password on lines `10 and 11`.
-  > _Use a unique SSID for each device._
+  > _Tip: Set a unique SSID for each device._
+
 ### Usage
 1. Power on your ESP8266 devices.
 2. Connect to the WiFi network created by the devices.
-3. Access the web interface by going to `http://192.168.4.1`
+3. Access the web interface by going to `http://192.168.4.1`.
 4. Use the web interface to save or send messages.
+
 ### Troubleshooting
 1. Ensure both devices are powered on and within range.
 2. Check the serial monitor for error messages.
 3. Verify that the MAC addresses are correctly configured.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](https://www.gnu.org/licenses/gpl-3.0.en.html) file for details.
+
+## Acknowledgments
+- Rui Santos & Sara Santos - [Random Nerd Tutorials](https://RandomNerdTutorials.com)
+
+---
+
+Happy building!
+
 
    
 
