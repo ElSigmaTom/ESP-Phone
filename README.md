@@ -7,11 +7,14 @@
 <sub> 
 For Rafty:
 (If the message is not received, consider swapping between these MAC addresses)
-1: A0:20:A6:1A:A3:13 (AP1 TARGET MAC)
-0xA0, 0x20, 0xA6, 0x1A, 0xA3, 0x13
-2: 8C:CE:4E:CB:0A:F0 (AP2 TARGET MAC)
-0x8C, 0xCE, 0x4E, 0xCB, 0x0A, 0xF0 
-</sub>
+</sub><sub>
+1: A0:20:A6:1A:A3:13 (AP1 TARGET MAC)</sub>
+<sub>
+0xA0, 0x20, 0xA6, 0x1A, 0xA3, 0x13</sub>
+<sub>
+2: 8C:CE:4E:CB:0A:F0 (AP2 TARGET MAC)</sub>
+<sub>
+0x8C, 0xCE, 0x4E, 0xCB, 0x0A, 0xF0 </sub>
 
 1. First identify each mac address using the code below:
 ```
