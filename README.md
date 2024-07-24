@@ -11,8 +11,9 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 - Efficient, low-power communication using ESP-NOW
 
 ## Planned Features
-- **Retransmission**: If a message is sent and the peer is not within reach, the device will keep retransmitting the message until it is acknowledged.
-
+- [ ] **Retransmission**: If a message is sent and the peer is not within reach, the device will keep retransmitting the message until it is acknowledged.
+- [ ] **LoRa**: LoRa for bonus range.
+- [ ] **Keypad_I2C**: Support for 4x3 Matrix Keypads via an I2C expander like PCF8574. 
 ## Hardware Requirements
 - Two ESP8266 devices
 - LCD1602 with I2C backpack
