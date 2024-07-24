@@ -73,7 +73,7 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
   > _Tip: Label your devices to keep track of them._
 4. Copy the MAC address of the peer device into `Line 68` of the main code file in this repository.
 5. Change SSID and Password on lines `10 and 11`.
-  > _Use a unique SSID for each device._
+  > _Tip: Set a unique SSID for each device._
 
 ### Usage
 1. Power on your ESP8266 devices.
