@@ -7,6 +7,11 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 - Web server for pre-saving phrases
 - LCD display for message viewing
 - Built-in message saving and deletion
+- Simple and intuitive user interface
+- Efficient, low-power communication using ESP-NOW
+
+## Planned Features
+- **Retransmission**: If a message is sent and the peer is not within reach, the device will keep retransmitting the message until it is acknowledged.
 
 ## Hardware Requirements
 - Two ESP8266 devices
@@ -29,8 +34,8 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 ## Getting Started
 
 ### Prerequisites
-- [Arduino IDE](https://www.arduino.cc/en/software) installed
 - ESP8266 board package installed in Arduino IDE
+- [Arduino IDE](https://www.arduino.cc/en/software) installed
 - [ESP8266WiFi](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi) library
 - [ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) library
 - [espnow](https://github.com/HarringayMakerSpace/ESP-Now) library
@@ -69,9 +74,18 @@ A simple way to turn two ESP8266 devices into interactive communication devices 
 2. Open the serial monitor: Tools > Serial Monitor or `Ctrl + Shift + M`
 3. Copy the MAC address and take note. 
   > _Tip: Label your devices to keep track of them._
+4. Copy the MAC address of the peer device into `Line 68` of the main code file in this repository.
+### Usage
+1. Power on your ESP8266 devices.
+2. Connect to the WiFi network created by the devices (SSID: ESP8266-AP1, Password: password).
+3. Access the web interface by navigating to the IP address displayed in the serial monitor.
+4. Use the web interface to save or send messages.
+### Troubleshooting
+1. Ensure both devices are powered on and within range.
+2. Check the serial monitor for error messages.
+3. Verify that the MAC addresses are correctly configured.
 
-### Update the Code
-1. Copy the MAC address of the peer device into `Line 68` of the main code file in this repository.
+   
 
 
 
