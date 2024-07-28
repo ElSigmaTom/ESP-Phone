@@ -16,7 +16,7 @@ volatile uint8_t ackStatus;
 unsigned long ledOnTime = 0;
 const unsigned long ledDelay = 2000;  // 2 seconds
 // Define retransmission parameters
-unsigned long retryInterval = 1000; // Example retry interval in milliseconds
+unsigned long retryInterval = 5000; // Example retry interval in milliseconds
 unsigned long retryCount = 0;
 unsigned long MaxRetries = 10;
 unsigned long lastSentTime = 0;
@@ -65,7 +65,7 @@ typedef struct struct_message {
 struct_message myData;
 
 // MAC address to broadcast to all devices
-uint8_t broadcastAddress[] = { 0xA0, 0x20, 0xA6, 0x1A, 0xA3, 0x13 };
+uint8_t broadcastAddress[] = { 0x8C, 0xCE, 0x4E, 0xCB, 0x0A, 0xF0 };
 
 // Buffers to store the last two received messages for the local device
 char line1[18] = "";        // Increased size to include null terminator
