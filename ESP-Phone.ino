@@ -9,14 +9,14 @@ const int maxSavedTexts = 30;
 char savedTexts[maxSavedTexts][18];
 const char *ssid = "ESP8266-AP1";
 const char *password = "password";
-unsigned long lastActivityTime = 0;            // Variable to track the last activity time
+unsigned long lastActivityTime = 0;             // Variable to track the last activity time
 const unsigned long inactivityTimeout = 10000;  // 10 seconds timeout in milliseconds
 volatile bool ackReceived = false;
 volatile uint8_t ackStatus;
 unsigned long ledOnTime = 0;
 const unsigned long ledDelay = 2000;  // 2 seconds
 // Define retransmission parameters
-unsigned long retryInterval = 5000; // Example retry interval in milliseconds
+unsigned long retryInterval = 5000;  // Example retry interval in milliseconds
 unsigned long retryCount = 0;
 unsigned long MaxRetries = 10;
 unsigned long lastSentTime = 0;
@@ -24,7 +24,7 @@ unsigned long lastSentTime = 0;
 bool enterPressed = false;
 bool displayPressed = false;
 unsigned long buttonsPressStartTime = 0;
-const unsigned long pressDuration = 500; // 500 milliseconds
+const unsigned long pressDuration = 500;  // 500 milliseconds
 
 ESP8266WebServer server(80);
 String savedTextsHTML = "";  // String to store dynamically added saved texts HTML
@@ -78,7 +78,9 @@ bool isLedOn = false;            // Flag to indicate LED status
 bool IsLCDOff = false;           // Variable to track the LCD backlight state
 
 // Menu state variables
-enum MenuState { MAIN_MENU, SEND_MESSAGE, VIEW_MESSAGES };
+enum MenuState { MAIN_MENU,
+                 SEND_MESSAGE,
+                 VIEW_MESSAGES };
 MenuState menuState = MAIN_MENU;
 int menuOption = 0;
 int savedTextCount = 0;    // To store the number of saved texts
@@ -116,8 +118,21 @@ void saveState() {
   }
   file.println(hasUnreadMessages);
   file.println(isLedOn);
+  file.println(ackStatus);  // Save the ackStatus
   file.close();
+
+  // Save the last message
+  File msgFile = SPIFFS.open("/lastmessage.txt", "w");
+  if (!msgFile) {
+    Serial.println("Failed to open lastmessage.txt for writing");
+    return;
+  }
+  msgFile.print(myData.a);
+  Serial.println("Saved last message:");
+  Serial.println(myData.a);
+  msgFile.close();
 }
+
 
 void loadState() {
   File file = SPIFFS.open("/state.txt", "r");
@@ -127,7 +142,36 @@ void loadState() {
   }
   hasUnreadMessages = file.readStringUntil('\n').toInt();
   isLedOn = file.readStringUntil('\n').toInt();
+  ackStatus = file.readStringUntil('\n').toInt();  // Load the ackStatus
   file.close();
+
+  // Load the last message
+  File msgFile = SPIFFS.open("/lastmessage.txt", "r");
+  if (!msgFile) {
+    Serial.println("Failed to open lastmessage.txt for reading");
+    return;
+  }
+  String lastMessage = msgFile.readString();  // Read the whole message including newlines
+  lastMessage.trim();  // Remove any trailing newlines or spaces
+
+  Serial.print("Loaded message length: ");
+  Serial.println(lastMessage.length());
+  Serial.print("Loaded message: ");
+  Serial.println(lastMessage);  // Debug message
+  
+  lastMessage.toCharArray(myData.a, sizeof(myData.a) + 1);  // Copy to myData.a
+
+  Serial.print("myData.a length: ");
+  Serial.println(strlen(myData.a));
+  Serial.print("myData.a: ");
+  Serial.println(myData.a);  // Debug message
+
+  msgFile.close();
+  if (ackStatus != 0) {
+    Serial.println("Will retransmit...");
+  } else {
+    Serial.println("Already received ack.");
+  }
 }
 
 void setupSPIFFS() {
@@ -199,8 +243,8 @@ void handleRoot() {
   // Form for input with character limit validation
   html += "<form>";
   html += "<input type='text' name='input' id='textInput' maxlength='16' placeholder='Enter text (max 16 characters)'>";
-  html += "<button type='button' onclick='saveText()'>Save</button>"; 
-  html += "<button type='button' onclick='sendText()'>Send</button>"; 
+  html += "<button type='button' onclick='saveText()'>Save</button>";
+  html += "<button type='button' onclick='sendText()'>Send</button>";
   html += "<p id='errorText' class='error'></p>";
   html += "</form>";
 
@@ -271,9 +315,9 @@ void handleSend() {
     // Check if enough time has passed since the last send
     unsigned long currentMillis = millis();
     if (currentMillis - lastSentTime >= retryInterval) {
-      esp_now_send(broadcastAddress, (uint8_t *) &myData, sizeof(myData));
-      lastSentTime = currentMillis; // Update the time of the last sent message
-      ackReceived = false;  // Reset acknowledgment flag
+      esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
+      lastSentTime = currentMillis;  // Update the time of the last sent message
+      ackReceived = false;           // Reset acknowledgment flag
       Serial.println("Message sent.");
       server.send(200, "text/plain", "Message sent.");
     } else {
@@ -420,7 +464,7 @@ void setup() {
   lastActivityTime = millis();  // Initialize the last activity time
   IsLCDOff = false;             // LCD is initially on
   Serial.begin(115200);
-  
+
   // Mount the file system
   if (!SPIFFS.begin()) {
     Serial.println("Failed to mount file system");
@@ -428,9 +472,10 @@ void setup() {
   }
 
   // Load data from SPIFFS
+  setupSPIFFS();
+  loadSavedTexts();
   loadState();
   loadMessages();
-  loadSavedTexts();
 
   //Initialize the LCD with a delay to ensure it has time to power up
   lcd.begin(16, 2);
@@ -464,8 +509,6 @@ void setup() {
   Serial.print("Access Point started. IP address: ");
   Serial.println(WiFi.softAPIP());
 
-  setupSPIFFS();
-  loadSavedTexts();
 
   server.on("/", handleRoot);
   server.on("/save", handleSave);
@@ -476,7 +519,7 @@ void setup() {
   Serial.println("HTTP server started");
 
   // Initialize ESP-NOW last
-  delay(500); // Delay before initializing ESP-NOW
+  delay(500);  // Delay before initializing ESP-NOW
   if (esp_now_init() != 0) {
     Serial.println("Error initializing ESP-NOW");
     return;
@@ -504,11 +547,19 @@ void loop() {
       Serial.println("Delivery Success");
       digitalWrite(RED_LED_PIN, HIGH);
       ledOnTime = millis();  // Record the current time
+      saveState();
     } else {
       Serial.println("Delivery Fail");
     }
   }
-
+  if (ackStatus != 0 && (millis() - lastSentTime >= 5000)) {
+    // Retry sending the data
+    delay(1000);
+    esp_now_send(broadcastAddress, (uint8_t *)&myData.a, sizeof(myData.a));
+    lastSentTime = millis();  // Reset the timestamp for the next retry
+    Serial.println("Retrying message send...");
+    saveState();
+  }
   // Turn off the LED after the delay period
   if (digitalRead(RED_LED_PIN) == HIGH && (millis() - ledOnTime >= ledDelay)) {
     digitalWrite(RED_LED_PIN, LOW);
@@ -585,10 +636,12 @@ void loop() {
         }
       } else if (menuState == SEND_MESSAGE && savedTextCount > 0) {
         // Send the selected message
-        strcpy(myData.a, savedTexts[currentTextIndex]);
+        strncpy(myData.a, savedTexts[currentTextIndex], sizeof(myData.a));
         esp_now_send(broadcastAddress, (uint8_t *)&myData.a, sizeof(myData.a));
         menuState = MAIN_MENU;
         displayMenu();
+        ackReceived = false; // reset ackStatus
+        saveState();  //save message to filesystem
       } else if (menuState == VIEW_MESSAGES) {
         menuState = MAIN_MENU;
         displayMenu();
