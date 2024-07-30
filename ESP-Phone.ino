@@ -261,7 +261,7 @@ void handleRoot() {
   html += "  const savedTexts = document.getElementById('savedTexts');";
 
   // JavaScript for saving text to server
-  html += "  window.saveText = function() {";
+  html += "  window.saveText = function(event) {";
   html += "    const text = input.value.trim();";
   html += "    if (text.length > 16) {";
   html += "      errorText.textContent = 'Error: Characters exceeding 16 are invalid.';";
@@ -280,14 +280,14 @@ void handleRoot() {
   html += "      fetch('/delete?text=' + encodeURIComponent(text));";
   html += "    });";
   html += "    listItem.appendChild(deleteButton);";  // Append delete button
-  html += "    savedTexts.appendChild(listItem);";    // Append list item
+  html += "    savedTexts.appendChild(listItem);";  // Append list item
 
   html += "    fetch('/save?input=' + encodeURIComponent(text));";
   html += "    input.value = '';";  // Clear input field
   html += "  };";
 
   // JavaScript for sending text to server
-  html += "  window.sendText = function() {";
+  html += "  window.sendText = function(event) {";
   html += "    const text = input.value.trim();";
   html += "    if (text.length > 16) {";
   html += "      errorText.textContent = 'Error: Characters exceeding 16 are invalid.';";
@@ -299,12 +299,17 @@ void handleRoot() {
   html += "  };";
 
   html += "});";
+  
+  html += "function deleteText(button) {";
+  html += "  const text = button.parentElement.textContent.slice(2, -4);"; // Extract text correctly
+  html += "  button.parentElement.remove();";
+  html += "  fetch('/delete?text=' + encodeURIComponent(text));";
+  html += "}";
   html += "</script>";
   html += "</body></html>";
+
   server.send(200, "text/html", html);
 }
-
-
 
 void handleSend() {
   if (server.hasArg("text")) {
@@ -330,44 +335,32 @@ void handleSend() {
 }
 
 void handleDelete() {
-  String textToDelete = server.arg("text");
-  textToDelete.trim();  // Remove leading and trailing whitespace
+  String text = server.arg("text");
+  text.trim();  // Remove leading and trailing whitespace
 
-  // Load all saved texts from file
+  // Create a temporary file excluding the text to be deleted
   File file = SPIFFS.open("/saved_texts.txt", "r");
-  if (!file) {
-    Serial.println("Failed to open saved_texts.txt for reading");
-    server.send(500, "text/plain", "Failed to delete text");
-    return;
-  }
-
-  // Temporary storage for updated texts
-  String updatedTexts = "";
+  File tempFile = SPIFFS.open("/temp_saved_texts.txt", "w");
 
   while (file.available()) {
-    String text = file.readStringUntil('\n');
-    text.trim();  // Remove leading and trailing whitespace
-
-    if (text != textToDelete) {
-      updatedTexts += text + "\n";
+    String line = file.readStringUntil('\n');
+    line.trim();  // Remove any leading or trailing whitespace/newlines
+    if (line != text) {
+      tempFile.println(line);
     }
   }
-  file.close();
 
-  // Write updated texts back to file
-  file = SPIFFS.open("/saved_texts.txt", "w");
-  if (!file) {
-    Serial.println("Failed to open saved_texts.txt for writing");
-    server.send(500, "text/plain", "Failed to delete text");
-    return;
-  }
-  file.print(updatedTexts);
   file.close();
+  tempFile.close();
 
-  // Reload saved texts to update HTML
+  // Replace the original file with the updated one
+  SPIFFS.remove("/saved_texts.txt");
+  SPIFFS.rename("/temp_saved_texts.txt", "/saved_texts.txt");
+
+  // Update the savedTextsHTML variable
   loadSavedTexts();
 
-  server.send(200, "text/plain", "Text deleted");
+  server.send(200, "text/plain", "Deleted text: " + text);
 }
 
 void handleSave() {
